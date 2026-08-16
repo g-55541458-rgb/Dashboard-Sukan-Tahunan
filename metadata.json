@@ -1,0 +1,6 @@
+{
+  "name": "Dashboard Kejohanan Sukan SJK(C) Chung Hwa Tenom 2026",
+  "description": "Dashboard Pengurusan & Decision Support System Kejohanan Sukan Tahunan SJK(C) Chung Hwa Tenom 2026",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
