@@ -26,9 +26,11 @@ CREATE TABLE IF NOT EXISTS public.tournament_sync (
   events JSONB NOT NULL DEFAULT '[]'::jsonb,
   athletes JSONB NOT NULL DEFAULT '[]'::jsonb,
   results JSONB NOT NULL DEFAULT '[]'::jsonb,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_by TEXT DEFAULT 'admin'
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Pastikan kolum serasi jika jadual lama sudah wujud
+ALTER TABLE public.tournament_sync ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
 
 -- 2. Membolehkan Row Level Security (RLS)
 ALTER TABLE public.tournament_sync ENABLE ROW LEVEL SECURITY;
@@ -225,7 +227,6 @@ export async function pushTournamentToSupabase(
       athletes,
       results,
       updated_at: new Date().toISOString(),
-      updated_by: 'web_client',
     };
 
     const { error } = await client
