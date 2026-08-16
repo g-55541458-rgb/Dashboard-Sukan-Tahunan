@@ -19,20 +19,21 @@ export const SUPABASE_SQL_SCHEMA = `-- =========================================
 -- Salin dan tampal skrip ini ke dalam Supabase SQL Editor:
 -- ========================================================
 
--- 1. Jadual Utama Penyegerakan Kejohanan (Tournament State)
+-- 1. Cipta Jadual Utama Penyegerakan Kejohanan jika belum ada
 CREATE TABLE IF NOT EXISTS public.tournament_sync (
   id TEXT PRIMARY KEY DEFAULT 'current_tournament',
   houses JSONB NOT NULL DEFAULT '[]'::jsonb,
   events JSONB NOT NULL DEFAULT '[]'::jsonb,
   athletes JSONB NOT NULL DEFAULT '[]'::jsonb,
   results JSONB NOT NULL DEFAULT '[]'::jsonb,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_by TEXT DEFAULT 'admin'
 );
 
--- 2. Membolehkan Row Level Security (RLS) & Polisi Akses Awam
+-- 2. Membolehkan Row Level Security (RLS)
 ALTER TABLE public.tournament_sync ENABLE ROW LEVEL SECURITY;
 
+-- 3. Polisi Akses Awam (Membolehkan Baca & Kemas Kini Markah)
 DROP POLICY IF EXISTS "Akses Penuh Baca Awam" ON public.tournament_sync;
 CREATE POLICY "Akses Penuh Baca Awam"
   ON public.tournament_sync
@@ -48,13 +49,23 @@ CREATE POLICY "Akses Penuh Tulis/Kemaskini Awam"
   USING (true)
   WITH CHECK (true);
 
--- 3. Membolehkan Realtime Replication untuk Paparan TV Langsung
-ALTER PUBLICATION supabase_realtime ADD TABLE public.tournament_sync;
-
--- 4. Masukkan rekod awal jika belum wujud
+-- 4. Masukkan rekod permulaan jika belum wujud
 INSERT INTO public.tournament_sync (id, houses, events, athletes, results, updated_at)
 VALUES ('current_tournament', '[]'::jsonb, '[]'::jsonb, '[]'::jsonb, '[]'::jsonb, now())
 ON CONFLICT (id) DO NOTHING;
+
+-- 5. Aktifkan Realtime secara selamat (tanpa ralat jika sudah wujud)
+DO $$
+BEGIN
+  BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.tournament_sync;
+  EXCEPTION
+    WHEN duplicate_object THEN
+      NULL; -- abaikan jika sudah wujud
+    WHEN OTHERS THEN
+      NULL;
+  END;
+END $$;
 `;
 
 let clientInstance: SupabaseClient | null = null;
