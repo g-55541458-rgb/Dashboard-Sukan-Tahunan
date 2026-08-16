@@ -56,19 +56,19 @@ export const AnimatedLeaderboard: React.FC<AnimatedLeaderboardProps> = ({ houseS
       {/* Background Glow */}
       <div className="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-red-600 text-white shadow-md">
-            <Trophy className="w-6 h-6" />
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div className="flex items-center space-x-3 min-w-0">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-red-600 text-white shadow-md shrink-0">
+            <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-wide text-slate-900 dark:text-white uppercase flex items-center gap-2">
-              KEDUDUKAN MATA RUMAH SUKAN
-              <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 dark:border-red-500/30">
-                <Sparkles className="w-3 h-3" /> REAL-TIME
+          <div className="min-w-0">
+            <h2 className="text-lg sm:text-2xl font-black tracking-wide text-slate-900 dark:text-white uppercase flex items-center flex-wrap gap-1.5 sm:gap-2">
+              <span>KEDUDUKAN MATA RUMAH SUKAN</span>
+              <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 dark:border-red-500/30">
+                <Sparkles className="w-3 h-3" /> LIVE
               </span>
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
               Kedudukan semasa berasaskan jumlah mata kumpul & pingat kejohanan
             </p>
           </div>
@@ -97,40 +97,40 @@ export const AnimatedLeaderboard: React.FC<AnimatedLeaderboardProps> = ({ houseS
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`p-4 rounded-xl border transition-all duration-300 relative overflow-hidden ${
+              className={`p-3.5 sm:p-4 rounded-xl border transition-all duration-300 relative overflow-hidden ${
                 isLeader
                   ? 'bg-amber-50/70 dark:bg-slate-950/80 border-amber-400 dark:border-amber-500/50 shadow-xl shadow-amber-500/10 ring-1 ring-amber-400 dark:ring-amber-500/20'
                   : 'bg-slate-50 dark:bg-slate-950/50 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               {/* House Identity Bar Overlay */}
-              <div className="flex items-center justify-between mb-2 z-10 relative">
-                <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-2 z-10 relative">
+                <div className="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
                   {/* Rank Badge */}
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${getRankBadgeClass(stat.rank)}`}>
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs sm:text-sm shrink-0 ${getRankBadgeClass(stat.rank)}`}>
                     #{stat.rank}
                   </div>
 
                   {/* House Icon & Name */}
-                  <div className="flex items-center space-x-2.5">
-                    <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center space-x-2 sm:space-x-2.5 min-w-0">
+                    <div className="p-1 sm:p-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shrink-0">
                       {getHouseIcon(house.iconName, house.color)}
                     </div>
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <span className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white" style={{ color: house.color }}>
+                    <div className="min-w-0">
+                      <div className="flex items-center space-x-1.5 sm:space-x-2 flex-wrap">
+                        <span className="font-extrabold text-base sm:text-lg truncate" style={{ color: house.color }}>
                           {house.name}
                         </span>
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700">
+                        <span className="text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 shrink-0">
                           {house.mascot}
                         </span>
                         {isLeader && (
-                          <span className="hidden md:inline-flex items-center text-[10px] font-black tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40 animate-pulse">
+                          <span className="hidden sm:inline-flex items-center text-[10px] font-black tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40 animate-pulse">
                             {getRankTitle(stat.rank)}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                      <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">
                         Ketua: <span className="text-slate-700 dark:text-slate-300 font-medium">{house.leaderName}</span>
                       </p>
                     </div>
@@ -138,20 +138,20 @@ export const AnimatedLeaderboard: React.FC<AnimatedLeaderboardProps> = ({ houseS
                 </div>
 
                 {/* Score & Medals Summary */}
-                <div className="text-right">
-                  <div className="text-2xl sm:text-3xl font-black tracking-tight flex items-baseline justify-end gap-1">
+                <div className="text-right ml-auto shrink-0">
+                  <div className="text-xl sm:text-3xl font-black tracking-tight flex items-baseline justify-end gap-1">
                     <span style={{ color: house.color }}>{stat.totalPoints}</span>
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">MATA</span>
+                    <span className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400">MATA</span>
                   </div>
 
-                  <div className="flex items-center justify-end space-x-2 text-xs font-medium text-slate-700 dark:text-slate-300 mt-0.5">
-                    <span className="flex items-center text-amber-600 dark:text-amber-400 font-bold" title="Pingat Emas">
+                  <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 text-xs font-medium text-slate-700 dark:text-slate-300 mt-0.5">
+                    <span className="flex items-center text-amber-600 dark:text-amber-400 font-bold text-[11px] sm:text-xs" title="Pingat Emas">
                       🥇 {stat.goldCount}
                     </span>
-                    <span className="flex items-center text-slate-700 dark:text-slate-300 font-bold" title="Pingat Perak">
+                    <span className="flex items-center text-slate-700 dark:text-slate-300 font-bold text-[11px] sm:text-xs" title="Pingat Perak">
                       🥈 {stat.silverCount}
                     </span>
-                    <span className="flex items-center text-amber-800 dark:text-amber-600 font-bold" title="Pingat Gangsa">
+                    <span className="flex items-center text-amber-800 dark:text-amber-600 font-bold text-[11px] sm:text-xs" title="Pingat Gangsa">
                       🥉 {stat.bronzeCount}
                     </span>
                   </div>

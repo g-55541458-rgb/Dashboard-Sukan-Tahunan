@@ -88,11 +88,11 @@ export const AdminPasswordModal: React.FC<AdminPasswordModalProps> = ({
             )}
           </div>
 
-          <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-900/50 text-[11px] text-blue-800 dark:text-blue-300 flex items-start space-x-2">
-            <KeyRound className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 flex items-start space-x-2">
+            <KeyRound className="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold">Katalaluan Lalai Standard: <code className="bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded text-blue-900 dark:text-blue-200 font-mono">1234</code></p>
-              <p className="text-slate-500 dark:text-slate-400 mt-0.5">Mencegah pengubahsuaian data tanpa kebenaran pada skrin awam.</p>
+              <p className="font-semibold text-slate-700 dark:text-slate-300">Pengesahan Keselamatan</p>
+              <p className="mt-0.5">Sila masukkan katalaluan pentadbir untuk mengakses tetapan dan kemasukan keputusan.</p>
             </div>
           </div>
 

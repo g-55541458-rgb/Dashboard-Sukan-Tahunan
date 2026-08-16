@@ -67,10 +67,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
 
         {/* Tab Navigation Buttons */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+        <div className="flex items-center space-x-1.5 overflow-x-auto w-full lg:w-auto pb-2 sm:pb-0 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
           <button
             onClick={() => setActiveTab('results')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               activeTab === 'results'
                 ? 'bg-red-600 text-white shadow-md'
                 : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
@@ -82,19 +82,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('athletes')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               activeTab === 'athletes'
                 ? 'bg-emerald-600 text-white shadow-md'
                 : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
             }`}
           >
             <Users className="w-4 h-4" />
-            <span>Atlet & Bulk CSV</span>
+            <span>Atlet & CSV</span>
           </button>
 
           <button
             onClick={() => setActiveTab('events')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               activeTab === 'events'
                 ? 'bg-amber-500 text-slate-950 shadow-md'
                 : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
@@ -106,7 +106,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('houses')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               activeTab === 'houses'
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
@@ -118,7 +118,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('reports')}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
               activeTab === 'reports'
                 ? 'bg-indigo-600 text-white shadow-md'
                 : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
@@ -133,7 +133,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               id="btn-admin-supabase-sync"
               onClick={onOpenSupabaseModal}
               title="Tetapan & Penyegerakan Pangkalan Data Supabase"
-              className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 isSupabaseConnected
                   ? 'bg-emerald-600/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/40 hover:bg-emerald-600/30'
                   : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
@@ -147,16 +147,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </button>
           )}
 
-          <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
+          <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1 shrink-0" />
 
           {onChangePasswordModal && (
             <button
               onClick={onChangePasswordModal}
               title="Tukar Katalaluan Admin"
-              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-amber-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700/60 transition-all"
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-amber-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700/60 transition-all shrink-0"
             >
               <KeyRound className="w-4 h-4" />
-              <span className="hidden md:inline">Tukar Katalaluan</span>
+              <span className="hidden sm:inline">Tukar Katalaluan</span>
             </button>
           )}
 
@@ -164,10 +164,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <button
               onClick={onLockAdmin}
               title="Kunci Panel Admin"
-              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/10 dark:bg-amber-500/20 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 transition-all"
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/10 dark:bg-amber-500/20 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 transition-all shrink-0"
             >
               <Lock className="w-4 h-4" />
-              <span className="hidden md:inline">Kunci Admin</span>
+              <span className="hidden sm:inline">Kunci Admin</span>
             </button>
           )}
         </div>

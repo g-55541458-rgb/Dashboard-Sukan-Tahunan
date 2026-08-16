@@ -10,6 +10,7 @@ import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AdminPasswordModal } from './components/admin/AdminPasswordModal';
 import { ChangePasswordModal } from './components/admin/ChangePasswordModal';
 import { SupabaseModal } from './components/admin/SupabaseModal';
+import { PublicSupabaseStatusModal } from './components/public/PublicSupabaseStatusModal';
 import { RotateCcw, AlertTriangle } from 'lucide-react';
 
 import { SportsHouse, SportsEvent, Athlete, EventResult } from './types';
@@ -40,6 +41,7 @@ export default function App() {
 
   // Supabase Integration State
   const [showSupabaseModal, setShowSupabaseModal] = useState<boolean>(false);
+  const [showPublicSupabaseModal, setShowPublicSupabaseModal] = useState<boolean>(false);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState<boolean>(false);
 
   // Auto-verify and connect to Supabase
@@ -106,7 +108,12 @@ export default function App() {
 
   // Admin Security Password State
   const [adminPassword, setAdminPassword] = useState<string>(() => {
-    return localStorage.getItem('admin_password') || '1234';
+    const saved = localStorage.getItem('admin_password');
+    if (!saved || saved === '1234') {
+      localStorage.setItem('admin_password', 'xcc1305');
+      return 'xcc1305';
+    }
+    return saved;
   });
   const [isAdminUnlocked, setIsAdminUnlocked] = useState<boolean>(false);
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
@@ -116,6 +123,25 @@ export default function App() {
     const saved = localStorage.getItem('app_theme');
     return saved === 'light' || saved === 'dark' ? saved : 'dark';
   });
+
+  // View Layout Mode (Desktop View vs Mobile View)
+  const [layoutMode, setLayoutMode] = useState<'desktop' | 'mobile'>(() => {
+    const saved = localStorage.getItem('app_layout_mode');
+    if (saved === 'desktop' || saved === 'mobile') return saved;
+    // Detect mobile viewport on first load if not explicitly set
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return 'mobile';
+    }
+    return 'desktop';
+  });
+
+  const handleToggleLayoutMode = () => {
+    setLayoutMode((prev) => {
+      const next = prev === 'desktop' ? 'mobile' : 'desktop';
+      localStorage.setItem('app_layout_mode', next);
+      return next;
+    });
+  };
 
   useEffect(() => {
     localStorage.setItem('app_theme', theme);
@@ -311,7 +337,15 @@ export default function App() {
         onLockAdmin={handleLockAdmin}
         onChangePasswordModal={() => setShowChangePassModal(true)}
         isSupabaseConnected={isSupabaseConnected}
-        onOpenSupabaseModal={() => setShowSupabaseModal(true)}
+        layoutMode={layoutMode}
+        onToggleLayoutMode={handleToggleLayoutMode}
+        onOpenSupabaseModal={() => {
+          if (currentMode === 'admin' && isAdminUnlocked) {
+            setShowSupabaseModal(true);
+          } else {
+            setShowPublicSupabaseModal(true);
+          }
+        }}
       />
 
       <main>
@@ -324,6 +358,8 @@ export default function App() {
             houseStats={houseStats}
             topAthletes={topAthletes}
             dssScenario={dssScenario}
+            layoutMode={layoutMode}
+            onToggleLayoutMode={handleToggleLayoutMode}
           />
         ) : (
           <AdminDashboard
@@ -348,9 +384,9 @@ export default function App() {
         )}
       </main>
 
-      {/* Supabase Cloud Database Sync Modal */}
+      {/* Supabase Cloud Database Configuration Modal (Admin Only) */}
       <SupabaseModal
-        isOpen={showSupabaseModal}
+        isOpen={showSupabaseModal && isAdminUnlocked}
         onClose={() => {
           setShowSupabaseModal(false);
           checkSupabaseStatus();
@@ -366,6 +402,16 @@ export default function App() {
           setResults(syncedData.results);
           setIsSupabaseConnected(true);
         }}
+      />
+
+      {/* Supabase Realtime Status Modal (Public Read-Only) */}
+      <PublicSupabaseStatusModal
+        isOpen={showPublicSupabaseModal}
+        onClose={() => {
+          setShowPublicSupabaseModal(false);
+          checkSupabaseStatus();
+        }}
+        onNavigateToAdmin={() => handleModeChange('admin')}
       />
 
       {/* Admin Password Unlock Modal */}

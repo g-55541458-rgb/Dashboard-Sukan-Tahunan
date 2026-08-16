@@ -54,11 +54,11 @@ export const OlahragawanSection: React.FC<OlahragawanSectionProps> = ({
                   </span>
                 </div>
 
-                <div className="flex items-center space-x-3 mt-3 text-xs bg-white dark:bg-slate-900/90 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">🥇 {olahragawan.goldCount} Emas</span>
-                  <span className="text-slate-700 dark:text-slate-300 font-bold">🥈 {olahragawan.silverCount} Perak</span>
-                  <span className="text-amber-800 dark:text-amber-600 font-bold">🥉 {olahragawan.bronzeCount} Gangsa</span>
-                  <span className="text-amber-600 dark:text-amber-300 font-black ml-auto">{olahragawan.totalPoints} MATA</span>
+                <div className="flex items-center flex-wrap gap-2 mt-3 text-xs bg-white dark:bg-slate-900/90 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold text-[11px] sm:text-xs">🥇 {olahragawan.goldCount} Emas</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-bold text-[11px] sm:text-xs">🥈 {olahragawan.silverCount} Perak</span>
+                  <span className="text-amber-800 dark:text-amber-600 font-bold text-[11px] sm:text-xs">🥉 {olahragawan.bronzeCount} Gangsa</span>
+                  <span className="text-amber-600 dark:text-amber-300 font-black ml-auto text-[11px] sm:text-xs">{olahragawan.totalPoints} MATA</span>
                 </div>
               </div>
             </div>
@@ -95,11 +95,11 @@ export const OlahragawanSection: React.FC<OlahragawanSectionProps> = ({
                   </span>
                 </div>
 
-                <div className="flex items-center space-x-3 mt-3 text-xs bg-white dark:bg-slate-900/90 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">🥇 {olahragawati.goldCount} Emas</span>
-                  <span className="text-slate-700 dark:text-slate-300 font-bold">🥈 {olahragawati.silverCount} Perak</span>
-                  <span className="text-amber-800 dark:text-amber-600 font-bold">🥉 {olahragawati.bronzeCount} Gangsa</span>
-                  <span className="text-amber-600 dark:text-amber-300 font-black ml-auto">{olahragawati.totalPoints} MATA</span>
+                <div className="flex items-center flex-wrap gap-2 mt-3 text-xs bg-white dark:bg-slate-900/90 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
+                  <span className="text-amber-600 dark:text-amber-400 font-bold text-[11px] sm:text-xs">🥇 {olahragawati.goldCount} Emas</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-bold text-[11px] sm:text-xs">🥈 {olahragawati.silverCount} Perak</span>
+                  <span className="text-amber-800 dark:text-amber-600 font-bold text-[11px] sm:text-xs">🥉 {olahragawati.bronzeCount} Gangsa</span>
+                  <span className="text-amber-600 dark:text-amber-300 font-black ml-auto text-[11px] sm:text-xs">{olahragawati.totalPoints} MATA</span>
                 </div>
               </div>
             </div>
