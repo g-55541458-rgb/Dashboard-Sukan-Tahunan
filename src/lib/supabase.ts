@@ -65,6 +65,34 @@ export function getSupabaseConfig(): SupabaseConfig {
   const envUrl = metaEnv.VITE_SUPABASE_URL || '';
   const envKey = metaEnv.VITE_SUPABASE_ANON_KEY || '';
 
+  // Check URL query parameters (e.g. for parents opening WhatsApp link)
+  if (typeof window !== 'undefined') {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlSb = urlParams.get('sb');
+      const urlSbUrl = urlParams.get('sb_url');
+      const urlSbKey = urlParams.get('sb_key');
+
+      if (urlSb) {
+        const decoded = JSON.parse(atob(decodeURIComponent(urlSb)));
+        if (decoded.u && decoded.k) {
+          saveSupabaseConfig(decoded.u, decoded.k, true);
+          // Clean URL without refresh
+          const cleanUrl = window.location.origin + window.location.pathname;
+          window.history.replaceState({}, document.title, cleanUrl);
+          return { url: decoded.u.trim(), anonKey: decoded.k.trim(), autoSync: true };
+        }
+      } else if (urlSbUrl && urlSbKey) {
+        saveSupabaseConfig(urlSbUrl, urlSbKey, true);
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+        return { url: urlSbUrl.trim(), anonKey: urlSbKey.trim(), autoSync: true };
+      }
+    } catch (e) {
+      console.warn('Could not parse Supabase URL params:', e);
+    }
+  }
+
   const storedUrl = localStorage.getItem(STORAGE_KEYS.URL) || '';
   const storedKey = localStorage.getItem(STORAGE_KEYS.ANON_KEY) || '';
   const autoSync = localStorage.getItem(STORAGE_KEYS.AUTO_SYNC) !== 'false'; // default true
@@ -74,6 +102,14 @@ export function getSupabaseConfig(): SupabaseConfig {
     anonKey: (storedKey || envKey).trim(),
     autoSync,
   };
+}
+
+export function generateParentShareUrl(customBaseUrl?: string): string {
+  const cfg = getSupabaseConfig();
+  if (!cfg.url || !cfg.anonKey) return '';
+  const base = customBaseUrl || (typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}` : '');
+  const payload = btoa(JSON.stringify({ u: cfg.url, k: cfg.anonKey }));
+  return `${base}?sb=${encodeURIComponent(payload)}`;
 }
 
 export function saveSupabaseConfig(url: string, anonKey: string, autoSync: boolean = true): void {

@@ -47,11 +47,12 @@ export default function App() {
     const cfg = getSupabaseConfig();
     if (cfg.url && cfg.anonKey) {
       const res = await testSupabaseConnection();
-      setIsSupabaseConnected(res.success && res.tableReady !== false);
-      if (res.success && res.tableReady !== false && cfg.autoSync) {
+      const ready = res.success && res.tableReady !== false;
+      setIsSupabaseConnected(ready);
+      if (ready && cfg.autoSync) {
         // Pull initial data if available
         const pullRes = await pullTournamentFromSupabase();
-        if (pullRes.success && pullRes.data && pullRes.data.results.length > 0) {
+        if (pullRes.success && pullRes.data && (pullRes.data.houses.length > 0 || pullRes.data.results.length > 0)) {
           setHouses(pullRes.data.houses);
           setEvents(pullRes.data.events);
           setAthletes(pullRes.data.athletes);
@@ -67,11 +68,12 @@ export default function App() {
     checkSupabaseStatus();
   }, [checkSupabaseStatus]);
 
-  // Realtime subscription for live TV dashboard and multi-device sync
+  // Realtime subscription & resilient polling for live TV and parent links
   useEffect(() => {
     const cfg = getSupabaseConfig();
-    if (!cfg.url || !cfg.anonKey || !cfg.autoSync) return;
+    if (!cfg.url || !cfg.anonKey || !cfg.autoSync || !isSupabaseConnected) return;
 
+    // 1. Supabase Postgres Changes WebSocket Subscription
     const unsubscribe = subscribeToSupabaseRealtime((payload) => {
       if (payload.houses && payload.events && payload.results) {
         setHouses(payload.houses);
@@ -81,8 +83,24 @@ export default function App() {
       }
     });
 
+    // 2. Resilient Polling Fallback (Every 4 seconds for instant updates on mobile networks)
+    const pollInterval = setInterval(async () => {
+      try {
+        const pullRes = await pullTournamentFromSupabase();
+        if (pullRes.success && pullRes.data && (pullRes.data.houses.length > 0 || pullRes.data.results.length > 0)) {
+          setHouses(pullRes.data.houses);
+          setEvents(pullRes.data.events);
+          setAthletes(pullRes.data.athletes);
+          setResults(pullRes.data.results);
+        }
+      } catch (err) {
+        // Silent fail on background poll
+      }
+    }, 4000);
+
     return () => {
       unsubscribe();
+      clearInterval(pollInterval);
     };
   }, [isSupabaseConnected]);
 

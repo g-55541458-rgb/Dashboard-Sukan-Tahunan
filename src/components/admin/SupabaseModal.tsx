@@ -14,6 +14,8 @@ import {
   Trash2,
   X,
   Code2,
+  Share2,
+  Smartphone,
 } from 'lucide-react';
 import {
   getSupabaseConfig,
@@ -22,6 +24,7 @@ import {
   testSupabaseConnection,
   pushTournamentToSupabase,
   pullTournamentFromSupabase,
+  generateParentShareUrl,
   SUPABASE_SQL_SCHEMA,
 } from '../../lib/supabase';
 import { SportsHouse, SportsEvent, Athlete, EventResult } from '../../types';
@@ -68,6 +71,7 @@ export const SupabaseModal: React.FC<SupabaseModalProps> = ({
   } | null>(null);
 
   const [copiedSql, setCopiedSql] = useState<boolean>(false);
+  const [copiedShareUrl, setCopiedShareUrl] = useState<boolean>(false);
   const [showSql, setShowSql] = useState<boolean>(false);
 
   useEffect(() => {
@@ -156,6 +160,15 @@ export const SupabaseModal: React.FC<SupabaseModalProps> = ({
     navigator.clipboard.writeText(SUPABASE_SQL_SCHEMA);
     setCopiedSql(true);
     setTimeout(() => setCopiedSql(false), 2500);
+  };
+
+  const handleCopyParentLink = () => {
+    const link = generateParentShareUrl();
+    if (link) {
+      navigator.clipboard.writeText(link);
+      setCopiedShareUrl(true);
+      setTimeout(() => setCopiedShareUrl(false), 3000);
+    }
   };
 
   const handleClear = () => {
@@ -351,6 +364,54 @@ export const SupabaseModal: React.FC<SupabaseModalProps> = ({
               )}
             </div>
           </div>
+
+          {/* Parent & Spectator Live Share Link */}
+          {url && anonKey && (
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/30">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 mt-0.5">
+                      <Smartphone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <span>Pautan Paparan Langsung Ibu Bapa (WhatsApp / Telegram)</span>
+                        <span className="text-[10px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">
+                          Auto-Sync Live
+                        </span>
+                      </h4>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1">
+                        Kongsi pautan khas ini kepada ibu bapa dan penonton. Apabila mereka membuka pautan ini, telefon mereka akan <strong>secara automatik berhubung terus ke Supabase</strong> dan menerima skor langsung dalam masa nyata tanpa perlu sebarang tetapan manual!
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    id="btn-copy-parent-live-link"
+                    onClick={handleCopyParentLink}
+                    className={`shrink-0 flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                      copiedShareUrl
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                    }`}
+                  >
+                    {copiedShareUrl ? (
+                      <>
+                        <Check className="w-4 h-4" />
+                        <span>Pautan Tersalin!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="w-4 h-4" />
+                        <span>Salin Pautan Ibu Bapa</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Quick Push & Pull Actions (Only active if connected) */}
           <div className="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-3">
