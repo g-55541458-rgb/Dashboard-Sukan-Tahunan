@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { HouseStats } from '../../types';
 import { Flame, Waves, Zap, Crown, Trophy, TrendingUp, Sparkles } from 'lucide-react';
+import { LiveScoreNumber } from './LiveScoreNumber';
 
 interface AnimatedLeaderboardProps {
   houseStats: HouseStats[];
@@ -140,7 +141,7 @@ export const AnimatedLeaderboard: React.FC<AnimatedLeaderboardProps> = ({ houseS
                 {/* Score & Medals Summary */}
                 <div className="text-right ml-auto shrink-0">
                   <div className="text-xl sm:text-3xl font-black tracking-tight flex items-baseline justify-end gap-1">
-                    <span style={{ color: house.color }}>{stat.totalPoints}</span>
+                    <LiveScoreNumber value={stat.totalPoints} color={house.color} />
                     <span className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400">MATA</span>
                   </div>
 

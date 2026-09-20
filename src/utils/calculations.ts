@@ -234,8 +234,8 @@ export function generateDSSAnalytics(
 
   const chaserGaps = houseStats.slice(1).map((stat) => {
     const gap = leader.totalPoints - stat.totalPoints;
-    // Avg gold points = 7
-    const minGoldsNeededToCatchUp = Math.ceil(gap / 7);
+    // Avg gold points = 16
+    const minGoldsNeededToCatchUp = Math.ceil(gap / 16);
     return {
       houseId: stat.house.id,
       gap,
@@ -260,7 +260,7 @@ export function generateDSSAnalytics(
     } else if (gapToSecond > totalRemainingPoints) {
       commentary = `🔒 ${leader.house.name} mempunyai kelebihan mata tidak terjejas (${gapToSecond} mata jurang melebihi ${totalRemainingPoints} mata berbaki). ${leader.house.name} secara matematik disahkan memenangi Kejohanan Sukan 2026!`;
     } else {
-      commentary = `🔥 ${leader.house.name} kini mendahului dengan ${leader.totalPoints} mata (${gapToSecond} mata di hadapan ${runnerUp?.house.name}). Terdapat ${remainingEventsCount} acara lagi yang menawarkan ${totalRemainingPoints} mata maksimum. ${runnerUp?.house.name} sekurang-kurangnya memerlukan ${Math.ceil(gapToSecond / 7)} pingat Emas lagi untuk memintas!`;
+      commentary = `🔥 ${leader.house.name} kini mendahului dengan ${leader.totalPoints} mata (${gapToSecond} mata di hadapan ${runnerUp?.house.name}). Terdapat ${remainingEventsCount} acara lagi yang menawarkan ${totalRemainingPoints} mata maksimum. ${runnerUp?.house.name} sekurang-kurangnya memerlukan ${Math.ceil(gapToSecond / 16)} pingat Emas lagi (+16 mata/emas) untuk memintas!`;
     }
   }
 

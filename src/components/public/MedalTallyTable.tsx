@@ -1,6 +1,7 @@
 import React from 'react';
 import { HouseStats } from '../../types';
 import { Award, ShieldAlert, Sparkles } from 'lucide-react';
+import { LiveScoreNumber } from './LiveScoreNumber';
 
 interface MedalTallyTableProps {
   houseStats: HouseStats[];
@@ -87,8 +88,8 @@ export const MedalTallyTable: React.FC<MedalTallyTableProps> = ({ houseStats }) 
                     <span className="text-red-600 dark:text-red-400 font-bold">-{stat.penaltyPoints - stat.baselinePoints}</span>
                   )}
                 </td>
-                <td className="py-3.5 px-4 text-right font-black text-lg" style={{ color: stat.house.color }}>
-                  {stat.totalPoints}
+                <td className="py-3.5 px-4 text-right font-black text-lg">
+                  <LiveScoreNumber value={stat.totalPoints} color={stat.house.color} showDiff={false} />
                 </td>
               </tr>
             ))}

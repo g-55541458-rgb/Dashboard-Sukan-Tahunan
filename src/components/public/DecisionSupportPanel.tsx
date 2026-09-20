@@ -22,8 +22,8 @@ export const DecisionSupportPanel: React.FC<DecisionSupportPanelProps> = ({
   const selectedStat = houseStats.find((s) => s.house.id === simHouseId) || houseStats[0];
   const leaderStat = houseStats[0];
 
-  // Simulated score
-  const simulatedPoints = (selectedStat?.totalPoints || 0) + simGolds * 7;
+  // Simulated score (+16 mata bagi setiap emas)
+  const simulatedPoints = (selectedStat?.totalPoints || 0) + simGolds * 16;
   const isOvertaking = simulatedPoints > (leaderStat?.totalPoints || 0);
   const simGap = Math.abs((leaderStat?.totalPoints || 0) - simulatedPoints);
 
@@ -118,12 +118,13 @@ export const DecisionSupportPanel: React.FC<DecisionSupportPanelProps> = ({
               <select
                 value={simGolds}
                 onChange={(e) => setSimGolds(Number(e.target.value))}
-                className="bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 font-bold p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs w-24"
+                className="bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 font-bold p-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs w-28"
               >
-                <option value={1}>1 Emas (+7)</option>
-                <option value={2}>2 Emas (+14)</option>
-                <option value={3}>3 Emas (+21)</option>
-                <option value={4}>4 Emas (+28)</option>
+                <option value={1}>1 Emas (+16)</option>
+                <option value={2}>2 Emas (+32)</option>
+                <option value={3}>3 Emas (+48)</option>
+                <option value={4}>4 Emas (+64)</option>
+                <option value={5}>5 Emas (+80)</option>
               </select>
             </div>
 
