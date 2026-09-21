@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { HouseStats, SportsEvent, EventResult, SportsHouse, TopAthlete } from '../../types';
-import { Printer, Download, Upload, FileText, ExternalLink, X, CheckCircle2, AlertCircle, FileCode } from 'lucide-react';
+import { Printer, Download, Upload, FileText, ExternalLink, X, CheckCircle2, AlertCircle, FileCode, Trophy } from 'lucide-react';
 
 interface ReportsAndExportProps {
   houseStats: HouseStats[];
@@ -10,6 +10,7 @@ interface ReportsAndExportProps {
   topAthletes: { olahragawan: TopAthlete | null; olahragawati: TopAthlete | null };
   onResetData: () => void;
   onImportDataJSON: (jsonStr: string) => void;
+  onOpenVictoryPodium?: () => void;
 }
 
 export const ReportsAndExport: React.FC<ReportsAndExportProps> = ({
@@ -20,6 +21,7 @@ export const ReportsAndExport: React.FC<ReportsAndExportProps> = ({
   topAthletes,
   onResetData,
   onImportDataJSON,
+  onOpenVictoryPodium,
 }) => {
   const [showPrintModal, setShowPrintModal] = useState<boolean>(false);
 
@@ -332,6 +334,38 @@ export const ReportsAndExport: React.FC<ReportsAndExportProps> = ({
           </label>
         </div>
       </div>
+
+      {/* Victory Podium Dedicated Launch Banner (Admin Only) */}
+      {onOpenVictoryPodium && (
+        <div className="bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-red-500/15 border-2 border-amber-500/30 rounded-2xl p-5 flex items-center justify-between flex-wrap gap-4 shadow-sm">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-400 p-2 text-slate-950 flex items-center justify-center shadow-md shrink-0">
+              <Trophy className="w-7 h-7 animate-bounce" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-800 dark:text-amber-300 border border-amber-500/30">
+                  Majlis Penutup & Pengumuman Juara
+                </span>
+              </div>
+              <h3 className="text-base font-black text-slate-900 dark:text-white mt-1">
+                Pentas Podium Kemenangan 3D Bertingkat (Olympic Victory Podium)
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Pentas khas untuk dipaparkan di skrin besar dewan semasa upacara penyampaian hadiah dan pengisytiharan rasmi Juara Keseluruhan.
+              </p>
+            </div>
+          </div>
+          <button
+            id="btn-reports-open-podium"
+            onClick={onOpenVictoryPodium}
+            className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-red-600 hover:from-amber-600 hover:to-red-700 text-white font-black text-xs sm:text-sm shadow-md shadow-amber-500/20 active:scale-95 transition-all shrink-0"
+          >
+            <Trophy className="w-4 h-4 text-yellow-300" />
+            <span>Lancarkan Pentas Podium 🏆</span>
+          </button>
+        </div>
+      )}
 
       {/* Embedded Printable Report View */}
       <div id="printable-report" className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 print:p-0 print:border-none">

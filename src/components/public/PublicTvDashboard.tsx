@@ -15,7 +15,6 @@ import { OlahragawanSection } from './OlahragawanSection';
 import { DecisionSupportPanel } from './DecisionSupportPanel';
 import { EventScheduleSection } from './EventScheduleSection';
 import {
-  Tv,
   Sparkles,
   Award,
   Shield,

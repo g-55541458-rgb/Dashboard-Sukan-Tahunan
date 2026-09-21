@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { HouseStats } from '../../types';
 import { Flame, Waves, Zap, Crown, Trophy, TrendingUp, Sparkles } from 'lucide-react';
 import { LiveScoreNumber } from './LiveScoreNumber';
+import { OlympicMedalPill } from './OlympicMedalBadge';
 
 interface AnimatedLeaderboardProps {
   houseStats: HouseStats[];
@@ -145,16 +146,10 @@ export const AnimatedLeaderboard: React.FC<AnimatedLeaderboardProps> = ({ houseS
                     <span className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400">MATA</span>
                   </div>
 
-                  <div className="flex items-center justify-end space-x-1.5 sm:space-x-2 text-xs font-medium text-slate-700 dark:text-slate-300 mt-0.5">
-                    <span className="flex items-center text-amber-600 dark:text-amber-400 font-bold text-[11px] sm:text-xs" title="Pingat Emas">
-                      🥇 {stat.goldCount}
-                    </span>
-                    <span className="flex items-center text-slate-700 dark:text-slate-300 font-bold text-[11px] sm:text-xs" title="Pingat Perak">
-                      🥈 {stat.silverCount}
-                    </span>
-                    <span className="flex items-center text-amber-800 dark:text-amber-600 font-bold text-[11px] sm:text-xs" title="Pingat Gangsa">
-                      🥉 {stat.bronzeCount}
-                    </span>
+                  <div className="flex items-center justify-end space-x-1 sm:space-x-1.5 mt-1">
+                    <OlympicMedalPill type="gold" count={stat.goldCount} size="xs" />
+                    <OlympicMedalPill type="silver" count={stat.silverCount} size="xs" />
+                    <OlympicMedalPill type="bronze" count={stat.bronzeCount} size="xs" />
                   </div>
                 </div>
               </div>

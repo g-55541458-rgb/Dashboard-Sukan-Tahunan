@@ -11,6 +11,9 @@ import { AdminPasswordModal } from './components/admin/AdminPasswordModal';
 import { ChangePasswordModal } from './components/admin/ChangePasswordModal';
 import { SupabaseModal } from './components/admin/SupabaseModal';
 import { PublicSupabaseStatusModal } from './components/public/PublicSupabaseStatusModal';
+import { VictoryPodiumModal } from './components/public/VictoryPodiumModal';
+import { TvKioskModal } from './components/public/TvKioskModal';
+import { QrScanModal } from './components/public/QrScanModal';
 import { RotateCcw, AlertTriangle } from 'lucide-react';
 
 import { SportsHouse, SportsEvent, Athlete, EventResult } from './types';
@@ -43,6 +46,15 @@ export default function App() {
   const [showSupabaseModal, setShowSupabaseModal] = useState<boolean>(false);
   const [showPublicSupabaseModal, setShowPublicSupabaseModal] = useState<boolean>(false);
   const [isSupabaseConnected, setIsSupabaseConnected] = useState<boolean>(false);
+
+  // Victory Podium Modal State
+  const [showVictoryPodium, setShowVictoryPodium] = useState<boolean>(false);
+
+  // TV Kiosk Fullscreen Presentation Loop Modal State
+  const [showTvKiosk, setShowTvKiosk] = useState<boolean>(false);
+
+  // Quick-Scan QR Code Modal State
+  const [showQrModal, setShowQrModal] = useState<boolean>(false);
 
   // Auto-verify and connect to Supabase
   const checkSupabaseStatus = useCallback(async () => {
@@ -106,10 +118,10 @@ export default function App() {
     };
   }, [isSupabaseConnected]);
 
-  // Admin Security Password State
+  // Admin Security Password State - Primary Password: xcc1305
   const [adminPassword, setAdminPassword] = useState<string>(() => {
     const saved = localStorage.getItem('admin_password');
-    if (!saved || saved === '1234') {
+    if (!saved || saved === '1234' || saved === 'admin123') {
       localStorage.setItem('admin_password', 'xcc1305');
       return 'xcc1305';
     }
@@ -339,6 +351,9 @@ export default function App() {
         isSupabaseConnected={isSupabaseConnected}
         layoutMode={layoutMode}
         onToggleLayoutMode={handleToggleLayoutMode}
+        onOpenVictoryPodium={() => setShowVictoryPodium(true)}
+        onOpenTvKiosk={() => setShowTvKiosk(true)}
+        onOpenQrModal={() => setShowQrModal(true)}
         onOpenSupabaseModal={() => {
           if (currentMode === 'admin' && isAdminUnlocked) {
             setShowSupabaseModal(true);
@@ -380,6 +395,8 @@ export default function App() {
             onLockAdmin={handleLockAdmin}
             isSupabaseConnected={isSupabaseConnected}
             onOpenSupabaseModal={() => setShowSupabaseModal(true)}
+            onOpenVictoryPodium={() => setShowVictoryPodium(true)}
+            onOpenTvKiosk={() => setShowTvKiosk(true)}
           />
         )}
       </main>
@@ -428,6 +445,34 @@ export default function App() {
         onClose={() => setShowChangePassModal(false)}
         currentPassword={adminPassword}
         onSaveNewPassword={handleSaveNewPassword}
+      />
+
+      {/* Full-Screen Victory Podium Presentation Modal */}
+      <VictoryPodiumModal
+        isOpen={showVictoryPodium}
+        onClose={() => setShowVictoryPodium(false)}
+        houseStats={houseStats}
+        topAthletes={topAthletes}
+        completedEventsCount={results.filter((r) => events.some((e) => e.id === r.eventId)).length}
+        totalEventsCount={events.length}
+      />
+
+      {/* Full-Screen TV & Projector Kiosk Presentation Loop Modal */}
+      <TvKioskModal
+        isOpen={showTvKiosk}
+        onClose={() => setShowTvKiosk(false)}
+        houseStats={houseStats}
+        houses={houses}
+        events={events}
+        results={results}
+        topAthletes={topAthletes}
+      />
+
+      {/* Quick-Scan QR Code Modal (Public & Admin) */}
+      <QrScanModal
+        isOpen={showQrModal}
+        onClose={() => setShowQrModal(false)}
+        deploymentUrl="https://g-55541458-rgb.github.io/Dashboard-Sukan-Tahunan/"
       />
 
       {/* Reset Confirmation Modal */}

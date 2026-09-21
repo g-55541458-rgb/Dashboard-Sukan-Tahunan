@@ -18,6 +18,7 @@ import {
   Cloud,
   Monitor,
   Smartphone,
+  QrCode,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -35,6 +36,9 @@ interface HeaderProps {
   onOpenSupabaseModal?: () => void;
   layoutMode?: 'desktop' | 'mobile';
   onToggleLayoutMode?: () => void;
+  onOpenVictoryPodium?: () => void;
+  onOpenTvKiosk?: () => void;
+  onOpenQrModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -52,6 +56,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSupabaseModal,
   layoutMode = 'desktop',
   onToggleLayoutMode,
+  onOpenVictoryPodium,
+  onOpenTvKiosk,
+  onOpenQrModal,
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
 
@@ -210,7 +217,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             id="btn-toggle-sound"
             onClick={onToggleSound}
-            title={soundEnabled ? 'Matikan Bunyi' : 'Aktifkan Bunyi FX'}
+            title={soundEnabled ? 'Matikan Bunyi FX' : 'Aktifkan Bunyi FX'}
             className={`p-1.5 sm:p-2 rounded-lg transition-all shrink-0 ${
               soundEnabled
                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
@@ -219,6 +226,47 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
           </button>
+
+          {/* Quick-Scan QR Code Button */}
+          {onOpenQrModal && (
+            <button
+              id="btn-header-qr-code"
+              onClick={onOpenQrModal}
+              title="Buka Modal Kod QR (Imbas untuk buka di telefon pintar)"
+              className="flex items-center space-x-1.5 p-1.5 sm:px-2.5 sm:py-2 rounded-lg text-xs font-bold transition-all bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 shadow-xs active:scale-95 shrink-0"
+            >
+              <QrCode className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+              <span className="hidden lg:inline">Kod QR</span>
+            </button>
+          )}
+
+          {/* TV Kiosk Presentation Loop Button - STRICTLY FOR ADMIN ONLY */}
+          {currentMode === 'admin' && isAdminUnlocked && onOpenTvKiosk && (
+            <button
+              id="btn-open-tv-kiosk-header"
+              onClick={onOpenTvKiosk}
+              title="Buka Mod Tayangan Penuh TV / Auto-Kiosk Projektor (F11 Fullscreen)"
+              className="flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-black transition-all bg-gradient-to-r from-red-600/30 via-amber-500/30 to-yellow-500/30 hover:from-red-600/40 hover:to-yellow-500/40 text-amber-300 hover:text-amber-200 border border-amber-400/50 shadow-sm active:scale-95 shrink-0"
+            >
+              <Tv className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 animate-pulse" />
+              <span className="hidden md:inline">Kiosk TV 360°</span>
+              <span className="md:hidden">Kiosk TV</span>
+            </button>
+          )}
+
+          {/* Victory Podium Presentation Button - STRICTLY FOR ADMIN ONLY */}
+          {currentMode === 'admin' && isAdminUnlocked && onOpenVictoryPodium && (
+            <button
+              id="btn-open-victory-podium"
+              onClick={onOpenVictoryPodium}
+              title="Buka Pentas Podium Kemenangan 3D (Hanya Pentadbir)"
+              className="flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-black transition-all bg-gradient-to-r from-amber-500/25 via-yellow-500/25 to-red-500/25 hover:from-amber-500/35 hover:to-red-500/35 text-amber-300 hover:text-amber-200 border border-amber-400/50 hover:border-amber-300 shadow-md shadow-amber-500/10 active:scale-95 shrink-0"
+            >
+              <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 animate-bounce" />
+              <span className="hidden sm:inline">Pentas Podium 3D</span>
+              <span className="sm:hidden">Podium</span>
+            </button>
+          )}
 
           {/* Mode Switcher Group */}
           <div className="flex bg-slate-900/80 p-0.5 sm:p-1 rounded-xl border border-slate-800 items-center shrink-0">

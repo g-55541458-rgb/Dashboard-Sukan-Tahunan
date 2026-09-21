@@ -1,6 +1,7 @@
 import React from 'react';
 import { EventResult, SportsEvent, SportsHouse } from '../../types';
 import { Activity, Flame, Trophy, Sparkles, CheckCircle2, Calendar } from 'lucide-react';
+import { OlympicMedalIcon } from './OlympicMedalBadge';
 
 interface RecentResultsFeedProps {
   results: EventResult[];
@@ -94,12 +95,12 @@ export const RecentResultsFeed: React.FC<RecentResultsFeedProps> = ({
                 {/* Winners Row */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                   {/* Gold Winner */}
-                  <div className="flex items-center space-x-2 bg-white dark:bg-slate-900/80 p-2 rounded-lg border border-amber-300 dark:border-amber-500/20 shadow-2xs">
-                    <span className="text-base">🥇</span>
-                    <div className="overflow-hidden">
+                  <div className="flex items-center space-x-2 bg-white dark:bg-slate-900/80 p-2 rounded-lg border border-amber-300/80 dark:border-amber-500/20 shadow-2xs">
+                    <OlympicMedalIcon type="gold" size="sm" />
+                    <div className="overflow-hidden min-w-0">
                       <p className="font-bold text-amber-700 dark:text-amber-300 truncate">{res.goldAthleteName}</p>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: goldHouse?.color }} />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate">
+                        <span className="w-2 h-2 rounded-full inline-block shrink-0" style={{ backgroundColor: goldHouse?.color }} />
                         {goldHouse ? goldHouse.name : ''} {res.goldRecord ? `(${res.goldRecord})` : ''}
                       </p>
                     </div>
@@ -107,11 +108,11 @@ export const RecentResultsFeed: React.FC<RecentResultsFeedProps> = ({
 
                   {/* Silver Winner */}
                   <div className="flex items-center space-x-2 bg-white dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
-                    <span className="text-base">🥈</span>
-                    <div className="overflow-hidden">
+                    <OlympicMedalIcon type="silver" size="sm" />
+                    <div className="overflow-hidden min-w-0">
                       <p className="font-bold text-slate-800 dark:text-slate-200 truncate">{res.silverAthleteName}</p>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: silverHouse?.color }} />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate">
+                        <span className="w-2 h-2 rounded-full inline-block shrink-0" style={{ backgroundColor: silverHouse?.color }} />
                         {silverHouse ? silverHouse.name : ''} {res.silverRecord ? `(${res.silverRecord})` : ''}
                       </p>
                     </div>
@@ -119,11 +120,11 @@ export const RecentResultsFeed: React.FC<RecentResultsFeedProps> = ({
 
                   {/* Bronze Winner */}
                   <div className="flex items-center space-x-2 bg-white dark:bg-slate-900/80 p-2 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
-                    <span className="text-base">🥉</span>
-                    <div className="overflow-hidden">
-                      <p className="font-bold text-amber-800 dark:text-amber-600 truncate">{res.bronzeAthleteName}</p>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: bronzeHouse?.color }} />
+                    <OlympicMedalIcon type="bronze" size="sm" />
+                    <div className="overflow-hidden min-w-0">
+                      <p className="font-bold text-orange-900 dark:text-orange-400 truncate">{res.bronzeAthleteName}</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate">
+                        <span className="w-2 h-2 rounded-full inline-block shrink-0" style={{ backgroundColor: bronzeHouse?.color }} />
                         {bronzeHouse ? bronzeHouse.name : ''} {res.bronzeRecord ? `(${res.bronzeRecord})` : ''}
                       </p>
                     </div>

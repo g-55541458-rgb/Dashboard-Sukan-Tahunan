@@ -5,7 +5,7 @@ import { EventManagement } from './EventManagement';
 import { BulkAthleteImport } from './BulkAthleteImport';
 import { ResultEntryForm } from './ResultEntryForm';
 import { ReportsAndExport } from './ReportsAndExport';
-import { Shield, Trophy, Users, Award, FileText, Settings2, KeyRound, Lock, Database } from 'lucide-react';
+import { Shield, Trophy, Users, Award, FileText, Settings2, KeyRound, Lock, Database, Tv } from 'lucide-react';
 
 interface AdminDashboardProps {
   houses: SportsHouse[];
@@ -25,6 +25,8 @@ interface AdminDashboardProps {
   onLockAdmin?: () => void;
   isSupabaseConnected?: boolean;
   onOpenSupabaseModal?: () => void;
+  onOpenVictoryPodium?: () => void;
+  onOpenTvKiosk?: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -45,6 +47,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onLockAdmin,
   isSupabaseConnected,
   onOpenSupabaseModal,
+  onOpenVictoryPodium,
+  onOpenTvKiosk,
 }) => {
   const [activeTab, setActiveTab] = useState<'houses' | 'events' | 'athletes' | 'results' | 'reports'>('results');
 
@@ -127,6 +131,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <FileText className="w-4 h-4" />
             <span>Laporan & Export</span>
           </button>
+
+          {onOpenVictoryPodium && (
+            <button
+              id="btn-admin-open-podium"
+              onClick={onOpenVictoryPodium}
+              title="Buka Pentas Podium Kemenangan 3D Penuh (Hanya Pentadbir)"
+              className="flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black transition-all bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:to-yellow-600 text-slate-950 shadow-md shadow-amber-500/25 active:scale-95 shrink-0"
+            >
+              <Trophy className="w-4 h-4 text-slate-950 animate-bounce" />
+              <span>Pentas Podium 3D 🏆</span>
+            </button>
+          )}
+
+          {onOpenTvKiosk && (
+            <button
+              id="btn-admin-open-tv-kiosk"
+              onClick={onOpenTvKiosk}
+              title="Buka Mod Tayangan Penuh TV / Auto-Kiosk Projektor (Hanya Pentadbir)"
+              className="flex items-center space-x-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-black transition-all bg-gradient-to-r from-red-600 via-amber-600 to-yellow-500 hover:from-red-500 hover:to-yellow-400 text-white shadow-md shadow-amber-500/25 active:scale-95 shrink-0"
+            >
+              <Tv className="w-4 h-4 text-amber-200 animate-pulse" />
+              <span>Kiosk TV 360° 📺</span>
+            </button>
+          )}
 
           {onOpenSupabaseModal && (
             <button
@@ -212,6 +240,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             topAthletes={topAthletes}
             onResetData={onResetData}
             onImportDataJSON={onImportDataJSON}
+            onOpenVictoryPodium={onOpenVictoryPodium}
           />
         )}
       </div>
