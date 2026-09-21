@@ -225,6 +225,7 @@ export const INITIAL_ATHLETES: Athlete[] = [
   { id: 'ath-3', name: 'Chong Zi Xuan', className: '6A', gender: 'Perempuan', category: 'P12', houseId: 'house-merah', events: ['100m (Perempuan Bawah 12)', '200m (Perempuan Bawah 12)'] },
   { id: 'ath-4', name: 'Nur Aishah Binti Ahmad', className: '5A', gender: 'Perempuan', category: 'P12', houseId: 'house-merah', events: ['Lontar Peluru (Perempuan Bawah 12)'] },
   { id: 'ath-5', name: 'Kenji Wong', className: '4A', gender: 'Lelaki', category: 'L10', houseId: 'house-merah', events: ['80m (Lelaki Bawah 10)'] },
+  { id: 'ath-5b', name: 'Siti Nurhaliza Binti Roslan', className: '4A', gender: 'Perempuan', category: 'P10', houseId: 'house-merah', events: ['80m (Perempuan Bawah 10)'] },
 
   // Rumah Biru
   { id: 'ath-6', name: 'Darren Wong Jin Hui', className: '6A', gender: 'Lelaki', category: 'L12', houseId: 'house-biru', events: ['100m (Lelaki Bawah 12)', '200m (Lelaki Bawah 12)'] },
@@ -232,6 +233,7 @@ export const INITIAL_ATHLETES: Athlete[] = [
   { id: 'ath-8', name: 'Fiona Yong Li Xuan', className: '6A', gender: 'Perempuan', category: 'P12', houseId: 'house-biru', events: ['100m (Perempuan Bawah 12)', 'Lompat Jauh (Perempuan Bawah 12)'] },
   { id: 'ath-9', name: 'Eunice Ho Shu Ting', className: '5B', gender: 'Perempuan', category: 'P12', houseId: 'house-biru', events: ['200m (Perempuan Bawah 12)'] },
   { id: 'ath-10', name: 'Rayyan Bin Rosli', className: '4B', gender: 'Lelaki', category: 'L10', houseId: 'house-biru', events: ['80m (Lelaki Bawah 10)'] },
+  { id: 'ath-10b', name: 'Emily Tan Mei Xuan', className: '3B', gender: 'Perempuan', category: 'P10', houseId: 'house-biru', events: ['80m (Perempuan Bawah 10)'] },
 
   // Rumah Hijau
   { id: 'ath-11', name: 'Brandon Lee Chee Keong', className: '6A', gender: 'Lelaki', category: 'L12', houseId: 'house-hijau', events: ['Lontar Peluru (Lelaki Bawah 12)', 'Lompat Jauh (Lelaki Bawah 12)'] },
@@ -239,6 +241,7 @@ export const INITIAL_ATHLETES: Athlete[] = [
   { id: 'ath-13', name: 'Amy Chong Xin Yi', className: '6A', gender: 'Perempuan', category: 'P12', houseId: 'house-hijau', events: ['100m (Perempuan Bawah 12)', '200m (Perempuan Bawah 12)'] },
   { id: 'ath-14', name: 'Vivian Soo Jia Qi', className: '5A', gender: 'Perempuan', category: 'P12', houseId: 'house-hijau', events: ['Lompat Jauh (Perempuan Bawah 12)'] },
   { id: 'ath-15', name: 'Jason Yong Tze Khai', className: '4A', gender: 'Lelaki', category: 'L10', houseId: 'house-hijau', events: ['80m (Lelaki Bawah 10)'] },
+  { id: 'ath-15b', name: 'Lee Jia Ying', className: '3A', gender: 'Perempuan', category: 'P10', houseId: 'house-hijau', events: ['80m (Perempuan Bawah 10)'] },
 
   // Rumah Kuning
   { id: 'ath-16', name: 'Alex Ting Jun Jie', className: '6A', gender: 'Lelaki', category: 'L12', houseId: 'house-kuning', events: ['Lompat Jauh (Lelaki Bawah 12)', '200m (Lelaki Bawah 12)'] },
@@ -348,13 +351,13 @@ export const INITIAL_RESULTS: EventResult[] = [
     goldAthleteName: 'Chloe Tan Zi Ling',
     goldHouseId: 'house-kuning',
     goldRecord: '11.80s',
-    silverAthleteName: 'Nur Aishah Binti Ahmad',
+    silverAthleteName: 'Siti Nurhaliza Binti Roslan',
     silverHouseId: 'house-merah',
     silverRecord: '12.05s',
-    bronzeAthleteName: 'Fiona Yong Li Xuan',
+    bronzeAthleteName: 'Emily Tan Mei Xuan',
     bronzeHouseId: 'house-biru',
     bronzeRecord: '12.30s',
-    fourthAthleteName: 'Vivian Soo Jia Qi',
+    fourthAthleteName: 'Lee Jia Ying',
     fourthHouseId: 'house-hijau',
     fourthRecord: '12.60s',
     isNewRecord: false,

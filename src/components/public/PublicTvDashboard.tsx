@@ -6,6 +6,7 @@ import {
   EventResult,
   HouseStats,
   TopAthlete,
+  BestAthletesResult,
   DSSSimulationScenario,
 } from '../../types';
 import { AnimatedLeaderboard } from './AnimatedLeaderboard';
@@ -36,7 +37,7 @@ interface PublicTvDashboardProps {
   athletes: Athlete[];
   results: EventResult[];
   houseStats: HouseStats[];
-  topAthletes: { olahragawan: TopAthlete | null; olahragawati: TopAthlete | null };
+  topAthletes: BestAthletesResult;
   dssScenario: DSSSimulationScenario;
   layoutMode?: 'desktop' | 'mobile';
   onToggleLayoutMode?: () => void;
@@ -198,12 +199,9 @@ export const PublicTvDashboard: React.FC<PublicTvDashboardProps> = ({
             />
           </div>
 
-          {/* 4. Olahragawan & Olahragawati (Anugerah Terbaik) */}
+          {/* 4. Olahragawan & Olahragawati (Anugerah Terbaik - 4 Kategori) */}
           <div id="mobile-athletes" className="scroll-mt-32">
-            <OlahragawanSection
-              olahragawan={topAthletes.olahragawan}
-              olahragawati={topAthletes.olahragawati}
-            />
+            <OlahragawanSection topAthletes={topAthletes} />
           </div>
 
           {/* 5. Decision Support System (DSS Analytics & Scenario Prediction) */}
@@ -239,10 +237,7 @@ export const PublicTvDashboard: React.FC<PublicTvDashboardProps> = ({
                 houses={houses}
                 events={events}
               />
-              <OlahragawanSection
-                olahragawan={topAthletes.olahragawan}
-                olahragawati={topAthletes.olahragawati}
-              />
+              <OlahragawanSection topAthletes={topAthletes} />
             </div>
 
             {/* Right Column (5 cols): Medal Tally & Recent Results Feed */}

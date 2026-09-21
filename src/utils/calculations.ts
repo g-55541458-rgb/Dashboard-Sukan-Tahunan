@@ -1,4 +1,4 @@
-import { SportsHouse, SportsEvent, Athlete, EventResult, HouseStats, TopAthlete, DSSSimulationScenario } from '../types';
+import { SportsHouse, SportsEvent, Athlete, EventResult, HouseStats, TopAthlete, BestAthletesResult, DSSSimulationScenario } from '../types';
 
 export function calculateHouseStats(
   houses: SportsHouse[],
@@ -85,7 +85,7 @@ export function getTopAthletes(
   houses: SportsHouse[],
   results: EventResult[],
   events: SportsEvent[]
-): { olahragawan: TopAthlete | null; olahragawati: TopAthlete | null } {
+): BestAthletesResult {
   const houseMap: { [id: string]: SportsHouse } = {};
   houses.forEach((h) => (houseMap[h.id] = h));
 
@@ -129,6 +129,12 @@ export function getTopAthletes(
     const ev = eventMap[res.eventId];
     if (!ev) return; // Skip deleted events
 
+    // Exclude L8, P8, and Pra-Sekolah events from individual athlete award calculations
+    const isExcludedAwardEvent =
+      /l8|p8|pra[- ]?sekolah|pra\b/i.test(ev.category || '') ||
+      /\bl8\b|\bp8\b|bawah 8|pra[- ]?sekolah|prasekolah/i.test(ev.name);
+    if (isExcludedAwardEvent) return;
+
     const evName = ev.name;
     const scheme = ev.pointScheme || { gold: 7, silver: 5, bronze: 3, fourth: 1 };
 
@@ -157,38 +163,76 @@ export function getTopAthletes(
     }
   });
 
-  const allAthleteSummaries = Object.values(athleteStats).map((st) => {
-    const house = houseMap[st.houseId] || {
-      id: st.houseId,
-      name: 'Rumah Sukan',
-      mascot: '',
-      color: '#3b82f6',
-      iconName: 'Award',
-      leaderName: '',
-      baselinePoints: 0,
-      penaltyPoints: 0,
-    };
+  const allAthleteSummaries = Object.values(athleteStats)
+    .map((st) => {
+      const house = houseMap[st.houseId] || {
+        id: st.houseId,
+        name: 'Rumah Sukan',
+        mascot: '',
+        color: '#3b82f6',
+        iconName: 'Award',
+        leaderName: '',
+        baselinePoints: 0,
+        penaltyPoints: 0,
+      };
 
-    const dummyAthlete: Athlete = st.athlete || {
-      id: st.name,
-      name: st.name,
-      className: 'SJK(C) CH',
-      gender: 'Lelaki',
-      category: 'L12',
-      houseId: st.houseId,
-      events: st.eventsWon,
-    };
+      // Determine gender
+      let gender: 'Lelaki' | 'Perempuan' = 'Lelaki';
+      if (st.athlete?.gender) {
+        gender = st.athlete.gender;
+      } else if (st.eventsWon.some((ev) => /perempuan|p12|p10|p8/i.test(ev))) {
+        gender = 'Perempuan';
+      }
 
-    return {
-      athlete: dummyAthlete,
-      house,
-      goldCount: st.goldCount,
-      silverCount: st.silverCount,
-      bronzeCount: st.bronzeCount,
-      totalPoints: st.totalPoints,
-      eventsWon: st.eventsWon,
-    };
-  });
+      // Determine category strictly
+      let category: 'L12' | 'P12' | 'L10' | 'P10' | 'L8' | 'P8' | 'Pra-Sekolah' = 'L12';
+      if (st.athlete?.category) {
+        category = st.athlete.category as any;
+      } else {
+        const hasL10orP10 = st.eventsWon.some((ev) => /\bl10\b|\bp10\b|bawah 10|80m/i.test(ev));
+        const hasL8orP8 = st.eventsWon.some((ev) => /\bl8\b|\bp8\b|bawah 8|pra/i.test(ev));
+        if (hasL8orP8) {
+          category = gender === 'Perempuan' ? 'P8' : 'L8';
+        } else if (hasL10orP10) {
+          category = gender === 'Perempuan' ? 'P10' : 'L10';
+        } else {
+          category = gender === 'Perempuan' ? 'P12' : 'L12';
+        }
+      }
+
+      const dummyAthlete: Athlete = st.athlete || {
+        id: st.name,
+        name: st.name,
+        className: category.includes('10') ? '4A' : '6A',
+        gender: gender,
+        category: category,
+        houseId: st.houseId,
+        events: st.eventsWon,
+      };
+
+      return {
+        athlete: dummyAthlete,
+        house,
+        goldCount: st.goldCount,
+        silverCount: st.silverCount,
+        bronzeCount: st.bronzeCount,
+        totalPoints: st.totalPoints,
+        eventsWon: st.eventsWon,
+      };
+    })
+    // Filter out athletes registered under L8, P8, or Pra-Sekolah
+    .filter((summary) => {
+      const cat = (summary.athlete.category || '').toUpperCase().trim();
+      const cls = (summary.athlete.className || '').toUpperCase().trim();
+      const isExcluded =
+        cat === 'L8' ||
+        cat === 'P8' ||
+        cat === 'PRA-SEKOLAH' ||
+        cat === 'PRASEKOLAH' ||
+        cat === 'PRA' ||
+        /^PRA/i.test(cls);
+      return !isExcluded;
+    });
 
   // Sort by golds desc -> silvers desc -> bronzes desc -> points desc
   allAthleteSummaries.sort((a, b) => {
@@ -198,17 +242,93 @@ export function getTopAthletes(
     return b.totalPoints - a.totalPoints;
   });
 
-  const maleCandidates = allAthleteSummaries.filter(
-    (a) => a.athlete.gender === 'Lelaki' || a.athlete.category.startsWith('L')
-  );
+  // Strict Senior Checker (L12 & P12 ONLY)
+  const isSeniorAthlete = (ath: Athlete, eventsWon: string[]) => {
+    const cat = (ath.category || '').toUpperCase().trim();
+    const cls = (ath.className || '').toUpperCase().trim();
 
-  const femaleCandidates = allAthleteSummaries.filter(
-    (a) => a.athlete.gender === 'Perempuan' || a.athlete.category.startsWith('P')
-  );
+    // If explicitly L10, P10, L8, P8, or Pra -> definitely NOT Senior
+    if (cat === 'L10' || cat === 'P10' || cat === 'L8' || cat === 'P8' || cat === 'PRA-SEKOLAH' || cat === 'PRASEKOLAH') {
+      return false;
+    }
+    // If class is Year 1, 2, 3, 4 -> definitely NOT Senior
+    if (/^[1-4]/.test(cls)) {
+      return false;
+    }
+    // If category is L12 or P12 or L11 or P11
+    if (cat === 'L12' || cat === 'P12' || cat === 'L11' || cat === 'P11') {
+      return true;
+    }
+    // If class is Year 5 or 6
+    if (/^[56]/.test(cls)) {
+      return true;
+    }
+    // Otherwise check events won (must have senior events and NO junior events)
+    const hasSeniorEvent = eventsWon.some((ev) => /\bl12\b|\bp12\b|bawah 12|100m|200m|peluru|tinggi|jauh/i.test(ev));
+    const hasJuniorEvent = eventsWon.some((ev) => /\bl10\b|\bp10\b|bawah 10|80m/i.test(ev));
+    return hasSeniorEvent && !hasJuniorEvent;
+  };
+
+  // Strict Tunas Harapan Checker (L10 & P10 ONLY)
+  const isHarapanAthlete = (ath: Athlete, eventsWon: string[]) => {
+    const cat = (ath.category || '').toUpperCase().trim();
+    const cls = (ath.className || '').toUpperCase().trim();
+
+    // If explicitly L12, P12, L8, P8, or Pra -> definitely NOT Harapan
+    if (cat === 'L12' || cat === 'P12' || cat === 'L11' || cat === 'P11' || cat === 'L8' || cat === 'P8' || cat === 'PRA-SEKOLAH') {
+      return false;
+    }
+    // If class is Year 5, 6, 1, 2 -> definitely NOT Harapan
+    if (/^[5612]/.test(cls)) {
+      return false;
+    }
+    // If category is L10 or P10
+    if (cat === 'L10' || cat === 'P10') {
+      return true;
+    }
+    // If class is Year 3 or 4
+    if (/^[34]/.test(cls)) {
+      return true;
+    }
+    // Otherwise check events won
+    return eventsWon.some((ev) => /\bl10\b|\bp10\b|bawah 10|80m/i.test(ev));
+  };
+
+  const isMale = (ath: Athlete, eventsWon: string[]) => {
+    if (ath.gender === 'Lelaki') return true;
+    if (ath.gender === 'Perempuan') return false;
+    const cat = (ath.category || '').toUpperCase().trim();
+    if (cat.startsWith('L')) return true;
+    if (cat.startsWith('P')) return false;
+    if (eventsWon.some((ev) => /lelaki|l12|l10/i.test(ev))) return true;
+    if (eventsWon.some((ev) => /perempuan|p12|p10/i.test(ev))) return false;
+    return true;
+  };
+
+  const maleAthletes = allAthleteSummaries.filter((a) => isMale(a.athlete, a.eventsWon));
+  const femaleAthletes = allAthleteSummaries.filter((a) => !isMale(a.athlete, a.eventsWon));
+
+  // 1. Male Senior Candidates (L12) - STRICT
+  const maleSeniorCandidates = maleAthletes.filter((a) => isSeniorAthlete(a.athlete, a.eventsWon));
+  // 2. Female Senior Candidates (P12) - STRICT
+  const femaleSeniorCandidates = femaleAthletes.filter((a) => isSeniorAthlete(a.athlete, a.eventsWon));
+  // 3. Male Harapan Candidates (L10) - STRICT
+  const maleHarapanCandidates = maleAthletes.filter((a) => isHarapanAthlete(a.athlete, a.eventsWon));
+  // 4. Female Harapan Candidates (P10) - STRICT
+  const femaleHarapanCandidates = femaleAthletes.filter((a) => isHarapanAthlete(a.athlete, a.eventsWon));
+
+  const olahragawanL12 = maleSeniorCandidates.length > 0 ? maleSeniorCandidates[0] : null;
+  const olahragawatiP12 = femaleSeniorCandidates.length > 0 ? femaleSeniorCandidates[0] : null;
+  const olahragawanL10 = maleHarapanCandidates.length > 0 ? maleHarapanCandidates[0] : null;
+  const olahragawatiP10 = femaleHarapanCandidates.length > 0 ? femaleHarapanCandidates[0] : null;
 
   return {
-    olahragawan: maleCandidates.length > 0 ? maleCandidates[0] : null,
-    olahragawati: femaleCandidates.length > 0 ? femaleCandidates[0] : null,
+    olahragawanL12,
+    olahragawatiP12,
+    olahragawanL10,
+    olahragawatiP10,
+    olahragawan: olahragawanL12,
+    olahragawati: olahragawatiP12,
   };
 }
 

@@ -100,6 +100,19 @@ export interface TopAthlete {
   eventsWon: string[];
 }
 
+export interface BestAthletesResult {
+  // Senior (Bawah 12)
+  olahragawanL12: TopAthlete | null;
+  olahragawatiP12: TopAthlete | null;
+  // Junior / Tunas Harapan (Bawah 10)
+  olahragawanL10: TopAthlete | null;
+  olahragawatiP10: TopAthlete | null;
+
+  // Backward-compatibility aliases (Overall / Senior)
+  olahragawan: TopAthlete | null;
+  olahragawati: TopAthlete | null;
+}
+
 export interface DSSSimulationScenario {
   remainingEventsCount: number;
   totalRemainingPoints: number;

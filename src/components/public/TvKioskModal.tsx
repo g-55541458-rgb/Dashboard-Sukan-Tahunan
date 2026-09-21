@@ -22,7 +22,7 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react';
-import { HouseStats, SportsHouse, SportsEvent, EventResult, TopAthlete } from '../../types';
+import { HouseStats, SportsHouse, SportsEvent, EventResult, TopAthlete, BestAthletesResult } from '../../types';
 import { OlympicMedalIcon, OlympicMedalPill, MedalRatioBar } from './OlympicMedalBadge';
 import { LiveScoreNumber } from './LiveScoreNumber';
 
@@ -33,7 +33,7 @@ interface TvKioskModalProps {
   houses: SportsHouse[];
   events: SportsEvent[];
   results: EventResult[];
-  topAthletes: { olahragawan: TopAthlete | null; olahragawati: TopAthlete | null };
+  topAthletes: BestAthletesResult;
 }
 
 type KioskSlide = 'leaderboard' | 'medals' | 'results' | 'athletes';
@@ -698,7 +698,7 @@ export const TvKioskModal: React.FC<TvKioskModalProps> = ({
             </motion.div>
           )}
 
-          {/* ================= SLIDE 4: OLAHRAGAWAN SPOTLIGHT ================= */}
+          {/* ================= SLIDE 4: OLAHRAGAWAN SPOTLIGHT (4 KATEGORI) ================= */}
           {currentSlide === 'athletes' && (
             <motion.div
               key="slide-athletes"
@@ -706,137 +706,231 @@ export const TvKioskModal: React.FC<TvKioskModalProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="space-y-6 my-auto"
+              className="space-y-4 my-auto max-w-6xl mx-auto w-full"
             >
               <div className="text-center space-y-1">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
-                  <Award className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>PENARAFAN PRESTASI INDIVIDU TERTINGGI</span>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>PENARAFAN PRESTASI INDIVIDU 4 KATEGORI</span>
                 </div>
-                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight drop-shadow-md">
-                  ANUGERAH OLAHRAGAWAN & OLAHRAGAWATI
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight drop-shadow-md">
+                  ANUGERAH OLAHRAGAWAN & OLAHRAGAWATI KEJOHANAN
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-400">
-                  Berdasarkan pungutan pingat emas individu terbanyak & catatan rekod kejohanan
+                  Kategori Senior (L12 & P12) serta Kategori Tunas Harapan (L10 & P10)
                 </p>
               </div>
 
-              {/* 2 Big Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto w-full pt-2">
-                {/* Olahragawan */}
-                <div className="rounded-2xl p-6 sm:p-8 bg-gradient-to-b from-blue-950/40 to-slate-950 border-2 border-blue-500/40 shadow-2xl relative overflow-hidden flex flex-col justify-between">
-                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/20 rounded-full blur-2xl" />
-
+              {/* 4 Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full pt-1">
+                {/* 1. Olahragawan Senior (L12) */}
+                <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-blue-950/50 to-slate-950 border-2 border-blue-500/40 shadow-xl relative overflow-hidden flex flex-col justify-between">
+                  <div className="absolute -top-8 -right-8 w-24 h-24 bg-blue-600/20 rounded-full blur-xl" />
                   <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-black uppercase tracking-wider shadow-md">
-                        👑 OLAHRAGAWAN
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-2.5 py-1 rounded-full bg-blue-600 text-white text-[11px] font-black uppercase tracking-wider shadow-md">
+                        👑 L12 SENIOR
                       </span>
-                      <span className="text-xs font-bold text-blue-300">LELAKI TERBAIK</span>
+                      <span className="text-[10px] font-bold text-blue-300 uppercase">Olahragawan</span>
                     </div>
 
-                    {topAthletes.olahragawan ? (
-                      <div className="space-y-3">
-                        <h3 className="text-2xl sm:text-3xl font-black text-white">
-                          {topAthletes.olahragawan.name}
+                    {topAthletes.olahragawanL12 ? (
+                      <div className="space-y-2.5">
+                        <h3 className="text-lg sm:text-xl font-black text-white truncate">
+                          {topAthletes.olahragawanL12.athlete.name}
                         </h3>
-                        <div className="flex items-center space-x-2 text-sm text-slate-300">
+                        <div className="flex items-center space-x-2 text-xs text-slate-300">
                           <span
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: topAthletes.olahragawan.houseColor }}
+                            className="w-2.5 h-2.5 rounded-full"
+                            style={{ backgroundColor: topAthletes.olahragawanL12.house.color }}
                           />
-                          <span className="font-bold">{topAthletes.olahragawan.houseName}</span>
+                          <span className="font-bold">{topAthletes.olahragawanL12.house.name}</span>
                           <span className="text-slate-500">•</span>
-                          <span>Kelas {topAthletes.olahragawan.class}</span>
+                          <span>Kelas {topAthletes.olahragawanL12.athlete.className}</span>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-2 pt-4">
-                          <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
-                            <OlympicMedalIcon type="gold" size="sm" className="mx-auto mb-1" />
-                            <div className="text-xl font-black text-amber-300">
-                              {topAthletes.olahragawan.goldCount}
+                        <div className="grid grid-cols-3 gap-1.5 pt-2">
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">🥇 EMAS</span>
+                            <div className="text-base font-black text-amber-300">
+                              {topAthletes.olahragawanL12.goldCount}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold">EMAS</span>
                           </div>
-                          <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
-                            <OlympicMedalIcon type="silver" size="sm" className="mx-auto mb-1" />
-                            <div className="text-xl font-black text-slate-200">
-                              {topAthletes.olahragawan.silverCount}
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-slate-300 font-bold block">🥈 PERAK</span>
+                            <div className="text-base font-black text-slate-200">
+                              {topAthletes.olahragawanL12.silverCount}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold">PERAK</span>
                           </div>
-                          <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
-                            <OlympicMedalIcon type="bronze" size="sm" className="mx-auto mb-1" />
-                            <div className="text-xl font-black text-orange-300">
-                              {topAthletes.olahragawan.bronzeCount}
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">MATA</span>
+                            <div className="text-base font-black text-amber-400">
+                              {topAthletes.olahragawanL12.totalPoints}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold">GANGSA</span>
                           </div>
                         </div>
                       </div>
                     ) : (
-                      <p className="text-slate-400 text-sm py-8 text-center">
-                        Belum ada atlet lelaki yang memenangi pingat individu.
-                      </p>
+                      <p className="text-slate-500 text-xs py-6 text-center">Belum ada pemenang L12.</p>
                     )}
                   </div>
                 </div>
 
-                {/* Olahragawati */}
-                <div className="rounded-2xl p-6 sm:p-8 bg-gradient-to-b from-purple-950/40 to-slate-950 border-2 border-purple-500/40 shadow-2xl relative overflow-hidden flex flex-col justify-between">
-                  <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-600/20 rounded-full blur-2xl" />
-
+                {/* 2. Olahragawati Senior (P12) */}
+                <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-pink-950/50 to-slate-950 border-2 border-pink-500/40 shadow-xl relative overflow-hidden flex flex-col justify-between">
+                  <div className="absolute -top-8 -right-8 w-24 h-24 bg-pink-600/20 rounded-full blur-xl" />
                   <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-black uppercase tracking-wider shadow-md">
-                        👑 OLAHRAGAWATI
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-2.5 py-1 rounded-full bg-pink-600 text-white text-[11px] font-black uppercase tracking-wider shadow-md">
+                        👑 P12 SENIOR
                       </span>
-                      <span className="text-xs font-bold text-purple-300">PEREMPUAN TERBAIK</span>
+                      <span className="text-[10px] font-bold text-pink-300 uppercase">Olahragawati</span>
                     </div>
 
-                    {topAthletes.olahragawati ? (
-                      <div className="space-y-3">
-                        <h3 className="text-2xl sm:text-3xl font-black text-white">
-                          {topAthletes.olahragawati.name}
+                    {topAthletes.olahragawatiP12 ? (
+                      <div className="space-y-2.5">
+                        <h3 className="text-lg sm:text-xl font-black text-white truncate">
+                          {topAthletes.olahragawatiP12.athlete.name}
                         </h3>
-                        <div className="flex items-center space-x-2 text-sm text-slate-300">
+                        <div className="flex items-center space-x-2 text-xs text-slate-300">
                           <span
-                            className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: topAthletes.olahragawati.houseColor }}
+                            className="w-2.5 h-2.5 rounded-full"
+                            style={{ backgroundColor: topAthletes.olahragawatiP12.house.color }}
                           />
-                          <span className="font-bold">{topAthletes.olahragawati.houseName}</span>
+                          <span className="font-bold">{topAthletes.olahragawatiP12.house.name}</span>
                           <span className="text-slate-500">•</span>
-                          <span>Kelas {topAthletes.olahragawati.class}</span>
+                          <span>Kelas {topAthletes.olahragawatiP12.athlete.className}</span>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-2 pt-4">
-                          <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
-                            <OlympicMedalIcon type="gold" size="sm" className="mx-auto mb-1" />
-                            <div className="text-xl font-black text-amber-300">
-                              {topAthletes.olahragawati.goldCount}
+                        <div className="grid grid-cols-3 gap-1.5 pt-2">
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">🥇 EMAS</span>
+                            <div className="text-base font-black text-amber-300">
+                              {topAthletes.olahragawatiP12.goldCount}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold">EMAS</span>
                           </div>
-                          <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
-                            <OlympicMedalIcon type="silver" size="sm" className="mx-auto mb-1" />
-                            <div className="text-xl font-black text-slate-200">
-                              {topAthletes.olahragawati.silverCount}
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-slate-300 font-bold block">🥈 PERAK</span>
+                            <div className="text-base font-black text-slate-200">
+                              {topAthletes.olahragawatiP12.silverCount}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold">PERAK</span>
                           </div>
-                          <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-center">
-                            <OlympicMedalIcon type="bronze" size="sm" className="mx-auto mb-1" />
-                            <div className="text-xl font-black text-orange-300">
-                              {topAthletes.olahragawati.bronzeCount}
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">MATA</span>
+                            <div className="text-base font-black text-amber-400">
+                              {topAthletes.olahragawatiP12.totalPoints}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold">GANGSA</span>
                           </div>
                         </div>
                       </div>
                     ) : (
-                      <p className="text-slate-400 text-sm py-8 text-center">
-                        Belum ada atlet perempuan yang memenangi pingat individu.
-                      </p>
+                      <p className="text-slate-500 text-xs py-6 text-center">Belum ada pemenang P12.</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* 3. Olahragawan Harapan (L10) */}
+                <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-emerald-950/50 to-slate-950 border-2 border-emerald-500/40 shadow-xl relative overflow-hidden flex flex-col justify-between">
+                  <div className="absolute -top-8 -right-8 w-24 h-24 bg-emerald-600/20 rounded-full blur-xl" />
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-black uppercase tracking-wider shadow-md">
+                        ⭐ L10 HARAPAN
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-300 uppercase">Olahragawan</span>
+                    </div>
+
+                    {topAthletes.olahragawanL10 ? (
+                      <div className="space-y-2.5">
+                        <h3 className="text-lg sm:text-xl font-black text-white truncate">
+                          {topAthletes.olahragawanL10.athlete.name}
+                        </h3>
+                        <div className="flex items-center space-x-2 text-xs text-slate-300">
+                          <span
+                            className="w-2.5 h-2.5 rounded-full"
+                            style={{ backgroundColor: topAthletes.olahragawanL10.house.color }}
+                          />
+                          <span className="font-bold">{topAthletes.olahragawanL10.house.name}</span>
+                          <span className="text-slate-500">•</span>
+                          <span>Kelas {topAthletes.olahragawanL10.athlete.className}</span>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-1.5 pt-2">
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">🥇 EMAS</span>
+                            <div className="text-base font-black text-amber-300">
+                              {topAthletes.olahragawanL10.goldCount}
+                            </div>
+                          </div>
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-slate-300 font-bold block">🥈 PERAK</span>
+                            <div className="text-base font-black text-slate-200">
+                              {topAthletes.olahragawanL10.silverCount}
+                            </div>
+                          </div>
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">MATA</span>
+                            <div className="text-base font-black text-amber-400">
+                              {topAthletes.olahragawanL10.totalPoints}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-slate-500 text-xs py-6 text-center">Belum ada pemenang L10.</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. Olahragawati Harapan (P10) */}
+                <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-amber-950/50 to-slate-950 border-2 border-amber-500/40 shadow-xl relative overflow-hidden flex flex-col justify-between">
+                  <div className="absolute -top-8 -right-8 w-24 h-24 bg-amber-600/20 rounded-full blur-xl" />
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-2.5 py-1 rounded-full bg-amber-600 text-white text-[11px] font-black uppercase tracking-wider shadow-md">
+                        ⭐ P10 HARAPAN
+                      </span>
+                      <span className="text-[10px] font-bold text-amber-300 uppercase">Olahragawati</span>
+                    </div>
+
+                    {topAthletes.olahragawatiP10 ? (
+                      <div className="space-y-2.5">
+                        <h3 className="text-lg sm:text-xl font-black text-white truncate">
+                          {topAthletes.olahragawatiP10.athlete.name}
+                        </h3>
+                        <div className="flex items-center space-x-2 text-xs text-slate-300">
+                          <span
+                            className="w-2.5 h-2.5 rounded-full"
+                            style={{ backgroundColor: topAthletes.olahragawatiP10.house.color }}
+                          />
+                          <span className="font-bold">{topAthletes.olahragawatiP10.house.name}</span>
+                          <span className="text-slate-500">•</span>
+                          <span>Kelas {topAthletes.olahragawatiP10.athlete.className}</span>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-1.5 pt-2">
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">🥇 EMAS</span>
+                            <div className="text-base font-black text-amber-300">
+                              {topAthletes.olahragawatiP10.goldCount}
+                            </div>
+                          </div>
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-slate-300 font-bold block">🥈 PERAK</span>
+                            <div className="text-base font-black text-slate-200">
+                              {topAthletes.olahragawatiP10.silverCount}
+                            </div>
+                          </div>
+                          <div className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 text-center">
+                            <span className="text-[10px] text-amber-400 font-bold block">MATA</span>
+                            <div className="text-base font-black text-amber-400">
+                              {topAthletes.olahragawatiP10.totalPoints}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-slate-500 text-xs py-6 text-center">Belum ada pemenang P10.</p>
                     )}
                   </div>
                 </div>
